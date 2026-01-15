@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(r)37bgxrpg | Resources Vault</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        /* Color Variables */
+        :root {
+            --bg-color: #f5f5f5;
+            --nav-bg: #ffffff;
+            --header-bg: #ffffff;
+            --card-bg: #ffffff;
+            --accent-color: #B1B2B5;
+            --text-color: #000000;
+            --text-muted: #666666;
+            --blue-primary: #003cff;
+            --blue-secondary: #00aaff;
+            --border-color: #000000;
+            --shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+            --switch-bg: #e0e0e0;
+        }
+
+        /* Dark Mode Colors */
+        [data-theme="dark"] {
+            --bg-color: #0f0f0f;
+            --nav-bg: #1a1a1a;
+            --header-bg: #1a1a1a;
+            --card-bg: #222222;
+            --accent-color: #333333;
+            --text-color: #ffffff;
+            --text-muted: #aaaaaa;
+            --blue-primary: #4dd0ff;
+            --blue-secondary: #003cff;
+            --border-color: #444444;
+            --shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+            --switch-bg: #003cff; /* Active hotspot blue */
+        }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Nav */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background: var(--nav-bg);
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-link { text-decoration: none; color: inherit; }
+        .logo {
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 5px 15px;
+            background: var(--accent-color);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+        }
+
+        /* --- THE HOTSPOT SWITCH --- */
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .toggle-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            min-width: 45px;
+        }
+
+        .switch-rail {
+            width: 46px;
+            height: 24px;
+            background-color: var(--switch-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .switch-knob {
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        [data-theme="dark"] .switch-knob {
+            transform: translateX(22px);
+        }
+
+        /* --- HERO --- */
+        .resources-header {
+            padding: 60px 5% 30px;
+            text-align: center;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .resources-header h1 { font-size: 3rem; margin: 0; }
+        .r { color: var(--blue-primary); }
+        .bgx { color: var(--blue-secondary); }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 5%;
+        }
+
+        /* Section Styling */
+        .resource-section {
+            margin-bottom: 50px;
+            text-align: left;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: var(--blue-secondary);
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .resource-section h2 {
+            font-size: 1.8rem;
+            margin: 0 0 20px 0;
+            border-left: 5px solid var(--blue-primary);
+            padding-left: 15px;
+        }
+
+        /* Resource Items */
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .resource-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            border-color: var(--blue-primary);
+            box-shadow: var(--shadow);
+        }
+
+        .item-info h4 { margin: 0; font-size: 1.1rem; }
+        .item-info p { margin: 2px 0 0 0; font-size: 0.85rem; color: var(--text-muted); }
+
+        .item-link-icon {
+            font-weight: bold;
+            color: var(--blue-primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.6;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo-link">
+            <div class="logo">(r)37bgxrpg</div>
+        </a>
+        
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <div class="switch-container" onclick="toggleTheme()">
+                <span class="toggle-label" id="mode-text">LIGHT</span>
+                <div class="switch-rail">
+                    <div class="switch-knob"></div>
+                </div>
+            </div>
+            <a href="index.html" style="text-decoration: none; color: var(--text-color); font-size: 0.9rem;">← Home</a>
+        </div>
+    </nav>
+
+    <header class="resources-header">
+        <h1><span class="r">(r)</span><span class="bgx">esources</span></h1>
+        <p>A curated collection of tools, code, and design assets.</p>
+    </header>
+
+    <div class="container">
+
+        <section id="github" class="resource-section">
+            <span class="section-tag">CODE</span>
+            <h2>GitHub Repositories</h2>
+            <div class="resource-list">
+                <a href="https://r37bgxrpg.github.io/37-S-Games" class="resource-item" target="_blank">
+                    <div class="item-info">
+                        <h4>Games</h4>
+                        <p>Made classic games (discontinued)</p>
+                    </div>
+                    <div class="item-link-icon">VIEW →</div>
+                </a>
+                <a href="https://r37bgxrpg.github.io/reyanshparmar" class="resource-item" target="_blank">
+                    <div class="item-info">
+                        <h4>Legacy Portfolio</h4>
+                        <p>The original portfolio (discontinued).</p>
+                    </div>
+                    <div class="item-link-icon">VIEW →</div>
+                </a>
+            </div>
+        </section>
+
+        <section id="photo-edits" class="resource-section">
+            <span class="section-tag">VISUALS</span>
+            <h2>Photo Edits</h2>
+            <div class="resource-list">
+                <a href="https://r37bgxrpg.github.io/reyanshparmar/gallery.html" class="resource-item" target="_blank">
+                    <div class="item-info">
+                        <h4>Gallery</h4>
+                        <p>all my photo edits (the website is discontinued so there would be no updates on that. i will amke the gallery here and update the files).</p>
+                    </div>
+                    <div class="item-link-icon">VIEW →</div>
+                </a>
+            </div>
+        </section>
+
+        <section id="web-tools" class="resource-section">
+            <span class="section-tag">DEVELOPMENT</span>
+            <h2>Web Tools</h2>
+            <div class="resource-list">
+                <div class="resource-item" style="opacity: 0.6; cursor: not-allowed;">
+                    <div class="item-info">
+                        <h4>Component Library</h4>
+                        <p>A collection of CSS-only buttons and cards (Coming Soon).</p>
+                    </div>
+                    <div class="item-link-icon" style="color: #999;">LOCKED</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="designs" class="resource-section">
+            <span class="section-tag">UI/UX</span>
+            <h2>Designs & Layouts</h2>
+            <div class="resource-list">
+                <div class="resource-item" style="opacity: 0.6; cursor: not-allowed;">
+                    <div class="item-info">
+                        <h4>Penpot Exports</h4>
+                        <p>Raw HTML/CSS exports from design files.</p>
+                    </div>
+                    <div class="item-link-icon" style="color: #999;">LOCKED</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        &copy; 2026 curated by <span class="r">(r)</span><span class="bgx">37bgxrpg</span>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const doc = document.documentElement;
+            const label = document.getElementById('mode-text');
+            const isDark = doc.getAttribute('data-theme') === 'dark';
+            
+            if (isDark) {
+                doc.setAttribute('data-theme', 'light');
+                label.innerText = 'LIGHT';
+                localStorage.setItem('theme-pref', 'light');
+            } else {
+                doc.setAttribute('data-theme', 'dark');
+                label.innerText = 'DARK';
+                localStorage.setItem('theme-pref', 'dark');
+            }
+        }
+
+        // Apply theme on load
+        (function() {
+            const saved = localStorage.getItem('theme-pref');
+            if (saved === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('mode-text').innerText = 'DARK';
+            }
+        })();
+    </script>
+</body>
+</html>
