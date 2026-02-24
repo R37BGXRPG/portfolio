@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,65 +37,105 @@
             --switch-bg: #003cff;
         }
 
-        * { box-sizing: border-box; scroll-behavior: smooth; }
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
 
         body {
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
             font-family: 'JetBrains Mono', monospace;
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.4;
             transition: background 0.3s ease, color 0.3s ease;
+            cursor: none;
+        }
+
+        a,
+        button,
+        input {
+            cursor: none !important;
         }
 
         /* --- NAVIGATION --- */
         nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 5%; background: var(--nav-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background: var(--nav-bg);
             border-bottom: 2px solid var(--border-color);
-            position: sticky; top: 0; z-index: 1000;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
-            font-weight: bold; font-size: 1.1rem;
-            padding: 5px 15px; background: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 5px 15px;
+            background: var(--accent-color);
             border: 1px solid var(--border-color);
             border-radius: 50px;
-            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
         }
 
         /* --- THE TOGGLE SWITCH --- */
         .switch-container {
-            display: flex; align-items: center;
-            gap: 10px; cursor: pointer; user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
         }
 
-        .toggle-label { font-size: 0.75rem; font-weight: bold; min-width: 45px; }
+        .toggle-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            min-width: 45px;
+        }
 
         .switch-rail {
-            width: 46px; height: 24px;
+            width: 46px;
+            height: 24px;
             background-color: var(--switch-bg);
             border: 1px solid var(--border-color);
-            border-radius: 50px; position: relative;
+            border-radius: 50px;
+            position: relative;
             transition: background-color 0.3s;
         }
 
         .switch-knob {
-            width: 18px; height: 18px;
-            background-color: white; border-radius: 50%;
-            position: absolute; top: 2px; left: 2px;
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        [data-theme="dark"] .switch-knob { transform: translateX(22px); }
+        [data-theme="dark"] .switch-knob {
+            transform: translateX(22px);
+        }
 
-        .nav-links { display: flex; gap: 10px; align-items: center; }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
 
         .nav-item {
-            text-decoration: none; color: var(--text-color);
-            padding: 5px 15px; background: var(--nav-bg);
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 5px 15px;
+            background: var(--nav-bg);
             border: 1px solid var(--border-color);
-            border-radius: 50px; font-size: 0.85rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
             transition: all 0.2s;
         }
 
@@ -105,35 +146,66 @@
         }
 
         /* --- CONTENT SECTIONS --- */
-        section { padding: 30px 10%; display: flex; flex-direction: column; align-items: center; }
+        section {
+            padding: 30px 10%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
         .section-title {
             background: var(--accent-color);
-            padding: 3px 20px; font-size: 1rem;
-            border-radius: 50px; border: 1px solid var(--border-color);
+            padding: 3px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
             margin-bottom: 15px;
         }
 
-        .hero { min-height: 30vh; justify-content: center; }
-        .hero h1 { font-size: clamp(1.8rem, 6vw, 3.5rem); margin: 0; }
-        .r { color: var(--blue-primary); font-weight: bold; }
-        .bgx { color: var(--blue-secondary); font-weight: bold; }
+        .hero {
+            min-height: 30vh;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 6vw, 3.5rem);
+            margin: 0;
+        }
+
+        .r {
+            color: var(--blue-primary);
+            font-weight: bold;
+        }
+
+        .bgx {
+            color: var(--blue-secondary);
+            font-weight: bold;
+        }
 
         /* --- GRID & CARDS --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px; width: 100%; max-width: 1000px;
+            gap: 15px;
+            width: 100%;
+            max-width: 1000px;
         }
 
-        .card-link { text-decoration: none; color: inherit; display: block; }
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
 
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 20px;
-            text-align: left; box-shadow: var(--shadow);
-            transition: all 0.2s ease-in-out; height: 100%;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease-in-out;
+            height: 100%;
         }
 
         .card-link:hover .card {
@@ -142,16 +214,103 @@
             border-color: var(--blue-primary);
         }
 
-        .card h3 { margin: 0 0 8px 0; font-size: 1.2rem; display: flex; align-items: center; justify-content: space-between; }
-        .card h3::after { content: '→'; font-size: 1rem; opacity: 0.5; transition: 0.2s; }
-        .card-link:hover h3::after { opacity: 1; transform: translateX(5px); color: var(--blue-primary); }
-        .card p { margin: 0; font-size: 0.9rem; opacity: 0.8; }
+        .card h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-        footer { padding: 30px; text-align: center; font-size: 0.8rem; opacity: 0.6; }
+        .card h3::after {
+            content: '→';
+            font-size: 1rem;
+            opacity: 0.5;
+            transition: 0.2s;
+        }
+
+        .card-link:hover h3::after {
+            opacity: 1;
+            transform: translateX(5px);
+            color: var(--blue-primary);
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        footer {
+            padding: 30px;
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: left;
+        }
+
+        .special {
+            color: rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1), -2px -2px 0 #00aaff;
+            transition: color 1s, text-shadow 1s;
+        }
+
+        .special:hover {
+            color: #00aaff;
+            text-shadow: 2px 2px 0 #003cff, -2px -2px 0 #003cff;
+
+        }
+
+        .jusdots {
+            color: var(--blue-primary);
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .jusdots:hover {
+            border-color: var(--blue-primary);
+        }
+
+        .cursor-dot {
+            width: 20px;
+            height: 20px;
+            background-color: blue;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            /* Critical: allows clicking through the dot */
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            width: 15px;
+            height: 15px;
+            background-color: #ff4500;
+            /* High contrast color */
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            /* Crucial: clicks "pass through" to elements below */
+            z-index: 9999;
+            /* Stay on top of everything */
+            transition: transform 0.1s ease-out;
+            /* Adds a slight "organic" delay */
+        
+        }
     </style>
 </head>
-<body>
 
+<body>
+    <div class="cursor-dot"></div>
     <nav>
         <div class="logo">(r)37bgxrpg</div>
         <div class="nav-links">
@@ -168,14 +327,23 @@
 
     <section class="hero">
         <h1>I AM <span class="r">(r)</span><span class="bgx">37bgxrpg</span></h1>
-        <p>UI/UX Designer | Photo Editor</p>
+        <p>UI/UX Designer | Photo Editor | Learning to make Music</p>
     </section>
 
     <section id="about">
         <h2 class="section-title">About</h2>
         <p style="max-width: 600px; margin: 0;">
-            A redesigned space for my projects, tools, and shared resources.
+            Just being a <span class="bgx">14</span> year old, I am doing what no one at this age is trying to do. I am
+            learning to
+            work with ai, learning to create apps, learning to design, learning to edit photos, make music and a lot
+            more.
         </p>
+    </section>
+    <section class="hero">
+        <h1><span class="WAIT">I DON'T WAIT FOR SOMEONE TO TEACH. </span>
+            <br><span class="special">I MAKE MY OWN RULES</span>
+        </h1>
+        <p>Working with <a href="https://shubh72010.github.io/JusDots" class="jusdots">JusDots</a></p>
     </section>
 
     <section id="resources">
@@ -211,7 +379,7 @@
             const doc = document.documentElement;
             const label = document.getElementById('mode-text');
             const isDark = doc.getAttribute('data-theme') === 'dark';
-            
+
             if (isDark) {
                 doc.setAttribute('data-theme', 'light');
                 label.innerText = 'LIGHT';
@@ -224,13 +392,22 @@
         }
 
         // SYNC ON LOAD: Apply the theme saved from ANY page
-        (function() {
+        (function () {
             const saved = localStorage.getItem('theme-pref');
             if (saved === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
                 document.getElementById('mode-text').innerText = 'DARK';
             }
         })();
+
+        const dot = document.querySelector('.cursor-dot');
+
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+        });
+        
     </script>
 </body>
+
 </html>
