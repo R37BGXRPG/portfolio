@@ -1,417 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>(r)37bgxrpg | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        body { background-color: #000; color: #fff; font-family: 'Poppins', sans-serif; cursor: none; overflow-x: hidden; margin: 0; width: 100vw; }
+        .jetbrains { font-family: 'JetBrains Mono', monospace; }
+        .mono { font-family: 'Space Mono', monospace; }
 
-        /* Color Variables */
-        :root {
-            --bg-color: #f5f5f5;
-            --nav-bg: #ffffff;
-            --card-bg: #ffffff;
-            --accent-color: #B1B2B5;
-            --text-color: #000000;
-            --blue-primary: #003cff;
-            --blue-secondary: #00aaff;
-            --border-color: #000000;
-            --shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
-            --shadow-hover: 6px 6px 0px rgba(0, 60, 255, 0.3);
-            --switch-bg: #e0e0e0;
+        /* --- THE CURSOR --- */
+        #cursor-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999999; transform: translate(-50%, -50%); }
+        #cursor-outline { width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999998; transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1); transform: translate(-50%, -50%); }
+
+        /* --- LOADING SCREENS --- */
+        .overlay-screen { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100000; transition: opacity 0.5s ease; }
+        #loader { display: none; align-items: flex-start; justify-content: flex-start; padding: 4rem; overflow-y: auto; }
+        #impact-page { display: none; }
+
+        /* --- GLITCH & FLICKER SYSTEM --- */
+        .global-glitch {
+            animation: global-shake 0.15s infinite !important;
+            filter: drop-shadow(4px 0px 0px #ff00c1) drop-shadow(-4px 0px 0px #00fff9) !important;
+        }
+        @keyframes global-shake {
+            0% { transform: translate(0); }
+            20% { transform: translate(-8px, 3px); }
+            40% { transform: translate(8px, -3px); }
+            100% { transform: translate(0); }
         }
 
-        /* Dark Mode Colors */
-        [data-theme="dark"] {
-            --bg-color: #0f0f0f;
-            --nav-bg: #1a1a1a;
-            --card-bg: #222222;
-            --accent-color: #333333;
-            --text-color: #ffffff;
-            --blue-primary: #4dd0ff;
-            --blue-secondary: #003cff;
-            --border-color: #444444;
-            --shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
-            --switch-bg: #003cff;
+        .flicker-active { animation: text-flicker 0.05s infinite; }
+        @keyframes text-flicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
 
-        * {
-            box-sizing: border-box;
-            scroll-behavior: smooth;
+        .glitch-active.hover-glitch:hover {
+            animation: mini-shake 0.2s infinite;
+            text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9;
+            opacity: 1 !important;
+        }
+        @keyframes mini-shake {
+            0% { transform: translate(0); }
+            50% { transform: translate(-3px, 1px); }
+            100% { transform: translate(0); }
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'JetBrains Mono', monospace;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.4;
-            transition: background 0.3s ease, color 0.3s ease;
-            cursor: none;
+        #bg-glitch-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 90000; opacity: 0;
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 1px, transparent 1px, transparent 2px);
         }
 
-        a,
-        button,
-        input {
-            cursor: none !important;
-        }
+        /* --- CONTENT WRAPPER --- */
+        #main-content { opacity: 0; visibility: hidden; transition: opacity 1.5s ease; position: relative; z-index: 10; }
+        .show-content { opacity: 1 !important; visibility: visible !important; }
 
-        /* --- NAVIGATION --- */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 5%;
-            background: var(--nav-bg);
-            border-bottom: 2px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-weight: bold;
-            font-size: 1.1rem;
-            padding: 5px 15px;
-            background: var(--accent-color);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
-        }
-
-        /* --- THE TOGGLE SWITCH --- */
-        .switch-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .toggle-label {
-            font-size: 0.75rem;
-            font-weight: bold;
-            min-width: 45px;
-        }
-
-        .switch-rail {
-            width: 46px;
-            height: 24px;
-            background-color: var(--switch-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            position: relative;
-            transition: background-color 0.3s;
-        }
-
-        .switch-knob {
-            width: 18px;
-            height: 18px;
-            background-color: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-theme="dark"] .switch-knob {
-            transform: translateX(22px);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: var(--text-color);
-            padding: 5px 15px;
-            background: var(--nav-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background: var(--accent-color);
-            transform: translate(-1px, -1px);
-            box-shadow: 2px 2px 0px var(--border-color);
-        }
-
-        /* --- CONTENT SECTIONS --- */
-        section {
-            padding: 30px 10%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .section-title {
-            background: var(--accent-color);
-            padding: 3px 20px;
-            font-size: 1rem;
-            border-radius: 50px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 15px;
-        }
-
-        .hero {
-            min-height: 30vh;
-            justify-content: center;
-        }
-
-        .hero h1 {
-            font-size: clamp(1.8rem, 6vw, 3.5rem);
-            margin: 0;
-        }
-
-        .r {
-            color: var(--blue-primary);
-            font-weight: bold;
-        }
-
-        .bgx {
-            color: var(--blue-secondary);
-            font-weight: bold;
-        }
-
-        /* --- GRID & CARDS --- */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        .card-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: left;
-            box-shadow: var(--shadow);
-            transition: all 0.2s ease-in-out;
-            height: 100%;
-        }
-
-        .card-link:hover .card {
-            transform: translate(-4px, -4px);
-            box-shadow: var(--shadow-hover);
-            border-color: var(--blue-primary);
-        }
-
-        .card h3 {
-            margin: 0 0 8px 0;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .card h3::after {
-            content: '→';
-            font-size: 1rem;
-            opacity: 0.5;
-            transition: 0.2s;
-        }
-
-        .card-link:hover h3::after {
-            opacity: 1;
-            transform: translateX(5px);
-            color: var(--blue-primary);
-        }
-
-        .card p {
-            margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        footer {
-            padding: 30px;
-            text-align: center;
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
-
-        .main {
-            display: flex;
-            flex-direction: column;
-            align-items: left;
-            justify-content: left;
-        }
-
-        .special {
-            color: rgba(0, 0, 0, 0.1);
-            font-weight: bold;
-            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1), -2px -2px 0 #00aaff;
-            transition: color 1s, text-shadow 1s;
-        }
-
-        .special:hover {
-            color: #00aaff;
-            text-shadow: 2px 2px 0 #003cff, -2px -2px 0 #003cff;
-
-        }
-
-        .jusdots {
-            color: var(--blue-primary);
-            font-weight: bold;
-            text-decoration: none;
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.3s;
-        }
-
-        .jusdots:hover {
-            border-color: var(--blue-primary);
-        }
-
-        .cursor-dot {
-            width: 20px;
-            height: 20px;
-            background-color: blue;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            /* Critical: allows clicking through the dot */
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
-            width: 15px;
-            height: 15px;
-            background-color: #ff4500;
-            /* High contrast color */
-            border-radius: 50%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            /* Crucial: clicks "pass through" to elements below */
-            z-index: 9999;
-            /* Stay on top of everything */
-            transition: transform 0.1s ease-out;
-            /* Adds a slight "organic" delay */
-        
-        }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1s cubic-bezier(0.22, 1, 0.36, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .gradient-text { background: linear-gradient(180deg, #FFF 20%, #777 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
+<body id="body-main">
 
-<body>
-    <div class="cursor-dot"></div>
-    <nav>
-        <div class="logo">(r)37bgxrpg</div>
-        <div class="nav-links">
-            <div class="switch-container" onclick="toggleTheme()">
-                <span class="toggle-label" id="mode-text">LIGHT</span>
-                <div class="switch-rail">
-                    <div class="switch-knob"></div>
-                </div>
+    <div id="cursor-dot"></div>
+    <div id="cursor-outline"></div>
+    <div id="bg-glitch-overlay"></div>
+
+    <div id="warning-screen" class="overlay-screen jetbrains">
+        <div class="border border-red-600 p-10 max-w-xl text-center bg-red-950/10">
+            <h1 class="text-red-500 text-2xl font-bold mb-4 tracking-tighter italic underline">!!!PHOTOSENSITIVITY WARNING!!! Choose safe mode if photosensitive...</h1>
+            <p class="text-white/60 text-sm mb-10 leading-relaxed">Identity: (r)37bgxrpg. High-frequency digital interference detected. Choose your operational layer:</p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button onclick="bootSequence(true)" class="px-8 py-3 border border-green-500 text-green-500 hover:bg-green-500 hover:text-black transition text-xs jetbrains font-bold uppercase">Full Load (Glitch Mode)</button>
+                <button onclick="bootSequence(false)" class="px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition text-xs jetbrains font-bold uppercase">Safe Mode (Stability)</button>
             </div>
-            <a href="#about" class="nav-item">About</a>
-            <a href="resources.html" class="nav-item">Resources</a>
+        </div>
+    </div>
+
+    <div id="loader" class="overlay-screen jetbrains text-green-500 text-[10px] md:text-xs">
+        <div id="boot-log" class="space-y-1 w-full max-w-4xl"></div>
+    </div>
+
+    <div id="impact-page" class="overlay-screen jetbrains">
+        <h2 class="text-6xl md:text-9xl font-black text-green-500 animate-pulse tracking-tighter italic">BOOTING_</h2>
+    </div>
+
+    <nav class="fixed top-0 w-full z-[500] p-8 flex justify-between items-center">
+        <div class="text-xl font-black tracking-tighter">(r)37bgxrpg</div>
+        <div class="glass-panel px-8 py-2 rounded-full hidden md:flex gap-10 text-[10px] mono uppercase tracking-widest font-bold">
+            <a href="#work" class="hover:text-white/50 transition">/projects</a>
+            <a href="#identity" class="hover:text-white/50 transition">/identity</a>
+            <a href="#contact" class="hover:text-white/50 transition">/contact</a>
         </div>
     </nav>
 
-    <section class="hero">
-        <h1>I AM <span class="r">(r)</span><span class="bgx">37bgxrpg</span>/<span class="special"><span class="r"> R</span><span class+"bgx">eyansh Parmar</span></span></h1>
-        <p>UI/UX Designer | Photo Editor | Learning to make Music</p>
-    </section>
-
-    <section id="about">
-        <h2 class="section-title">About</h2>
-        <p style="max-width: 600px; margin: 0;">
-            Just being a <span class="bgx">14</span> year old, I am doing what no one at this age is trying to do. I am
-            learning to
-            work with ai, learning to create apps, learning to design, learning to edit photos, make music and a lot
-            more.
-        </p>
-    </section>
-    <section class="hero">
-        <h1><span class="WAIT">I DON'T WAIT FOR SOMEONE TO TEACH. </span>
-            <br><span class="special">I MAKE MY OWN RULES</span>
-        </h1>
-        <p>Working with <a href="https://shubh72010.github.io/JusDots" class="jusdots">JusDots</a>
-        <br>Moderator of Zeta HS
-        <br>Doing some things that my age people today will not even give a try. I am gonna proove them wrong...</p>
-    </section>
-
-    <section id="resources">
-        <h2 class="section-title">Explore Resources</h2>
-        <div class="grid">
-            <a href="resources.html#github" class="card-link">
-                <div class="card">
-                    <h3>GitHub</h3>
-                    <p>View my repositories, active projects, and code contributions.</p>
+    <main id="main-content">
+        <section class="min-h-screen flex flex-col justify-center px-8 md:px-24">
+            <div class="reveal">
+                <span class="mono text-[11px] text-white/30 uppercase tracking-[0.5em] mb-6 block font-bold">UI/UX Designer & Photo Editor</span>
+                <h1 class="text-7xl md:text-[10rem] font-black leading-[0.8] tracking-tighter mb-12 gradient-text">I MAKE <br> THE RULES.</h1>
+            </div>
+            <div class="flex flex-col md:flex-row gap-20 items-start reveal">
+                <p class="max-w-xl text-xl text-white/40 font-light leading-relaxed">
+                    14-year-old creator based in Bengaluru. Crafting high-fidelity interfaces at <b>JusDots</b>.
+                </p>
+                <div id="identity" class="mono text-[10px] space-y-3 pt-2 opacity-50 jetbrains uppercase">
+                    <p>LOC: BENGALURU, IN</p>
+                    <p>STATUS: 200_OK_STABLE</p>
                 </div>
-            </a>
-            <a href="resources.html#web-tools" class="card-link">
-                <div class="card">
-                    <h3>Web Tools</h3>
-                    <p>Helpful utilities and components for modern web development.</p>
-                </div>
-            </a>
-            <a href="resources.html#designs" class="card-link">
-                <div class="card">
-                    <h3>Designs</h3>
-                    <p>UI/UX layouts, Penpot exports, and CSS experiments.</p>
-                </div>
-            </a>
-        </div>
-    </section>
+            </div>
+        </section>
 
-    <footer>
-        &copy; 2026 built by <span class="r">(r)</span><span class="bgx">37bgxrpg</span>
-    </footer>
+        <section id="work" class="py-32 px-8 md:px-24">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="glass-panel p-16 rounded-[3rem] reveal">
+                    <p class="mono text-[10px] opacity-20 mb-12 font-bold uppercase tracking-widest">01 / JusChatz</p>
+                    <h3 class="text-5xl font-black mb-6 tracking-tighter">JusChatz</h3>
+                    <p class="text-white/40 text-lg font-light leading-relaxed">End-to-end encrypted messaging.</p>
+                </div>
+                <div class="glass-panel p-16 rounded-[3rem] reveal">
+                    <p class="mono text-[10px] opacity-20 mb-12 font-bold uppercase tracking-widest">02 / Zeta HS</p>
+                    <h3 class="text-5xl font-black mb-6 tracking-tighter">Zeta HS</h3>
+                    <p class="text-white/40 text-lg font-light leading-relaxed">Community management & moderation.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact" class="py-60 px-8 md:px-24 border-t border-white/5">
+            <div class="text-center reveal">
+                <h2 class="text-7xl md:text-[10vw] font-black mb-16 tracking-tighter italic">LET'S CONNECT.</h2>
+                
+                <a href="mailto:bitmusic693@gmail.com" class="hover-glitch mono text-2xl md:text-4xl opacity-40 transition border-b border-white/10 pb-4 jetbrains tracking-[0.3em] font-bold block w-fit mx-auto mb-12">EMAIL</a>
+                
+                <div class="flex flex-wrap justify-center gap-8 md:gap-12 jetbrains font-bold uppercase tracking-widest text-[11px] opacity-40">
+                    <a href="https://github.com/R37BGXRPG" class="hover-glitch transition-all">GITHUB: R37BGXRPG</a>
+                    <a href="https://instagram.com/37bgxrpg" class="hover-glitch transition-all">INSTA: 37BGXRPG</a>
+                    <a href="#" class="hover-glitch transition-all">DISCORD: 37BGXRPG</a>
+                </div>
+            </div>
+            
+            <div class="mt-48 text-center opacity-20 mono text-[10px] tracking-widest font-bold uppercase">
+                <p>© 2026 (R)37BGXRPG / BENGALURU, KARNATAKA</p>
+            </div>
+        </footer>
+    </main>
 
     <script>
-        function toggleTheme() {
-            const doc = document.documentElement;
-            const label = document.getElementById('mode-text');
-            const isDark = doc.getAttribute('data-theme') === 'dark';
-
-            if (isDark) {
-                doc.setAttribute('data-theme', 'light');
-                label.innerText = 'LIGHT';
-                localStorage.setItem('theme-pref', 'light');
-            } else {
-                doc.setAttribute('data-theme', 'dark');
-                label.innerText = 'DARK';
-                localStorage.setItem('theme-pref', 'dark');
-            }
-        }
-
-        // SYNC ON LOAD: Apply the theme saved from ANY page
-        (function () {
-            const saved = localStorage.getItem('theme-pref');
-            if (saved === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                document.getElementById('mode-text').innerText = 'DARK';
-            }
-        })();
-
-        const dot = document.querySelector('.cursor-dot');
+        const dot = document.getElementById('cursor-dot');
+        const outline = document.getElementById('cursor-outline');
+        let glitchMode = false;
 
         window.addEventListener('mousemove', (e) => {
             dot.style.left = e.clientX + 'px';
             dot.style.top = e.clientY + 'px';
+            outline.style.left = e.clientX + 'px';
+            outline.style.top = e.clientY + 'px';
         });
-        
+
+        async function bootSequence(useGlitch) {
+            glitchMode = useGlitch;
+            if (glitchMode) {
+                document.querySelectorAll('.hover-glitch').forEach(el => el.classList.add('glitch-active'));
+                document.getElementById('boot-log').classList.add('flicker-active');
+            }
+
+            document.getElementById('warning-screen').style.opacity = '0';
+            setTimeout(() => document.getElementById('warning-screen').style.display = 'none', 500);
+            document.getElementById('loader').style.display = 'flex';
+
+            const logs = [
+                ">_ Initializing kernel v3.0.1...",
+                ">_ [LOAD] Bengaluru_Node_01 established.",
+                ">_ Mounting /usr/identity/reyansh...",
+                ">_ Hardware: HP Pavilion Gaming 15 detected.",
+                ">_ CPU: Optimized for UI/UX rendering.",
+                ">_ GPU: Digital Glitch protocols enabled.",
+                ">_ Scanning JusDots source files...",
+                ">_ [SECURE] JusChatz E2EE module active.",
+                ">_ Loading JetBrains Mono Typeface...",
+                ">_ Syncing with Indian Standard Time...",
+                ">_ Calibrating RGB Displacement filters...",
+                ">_ [WARNING] High frequency flicker permitted.",
+                ">_ Identity verification: 14yo Designer Found.",
+                ">_ Preparing impact rendering engine...",
+                ">_ Finalizing system handshake...",
+                ">_ BOOT SUCCESSFUL."
+            ];
+
+            const logContainer = document.getElementById('boot-log');
+            for (let line of logs) {
+                const p = document.createElement('p');
+                p.innerHTML = `<span class="opacity-30">[RE-SYSTEM]</span> ${line}`;
+                logContainer.appendChild(p);
+                // Random delays to simulate a real boot
+                await new Promise(r => setTimeout(r, 150 + Math.random() * 200));
+            }
+
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
+            document.getElementById('impact-page').style.display = 'flex';
+
+            setTimeout(() => {
+                document.getElementById('impact-page').style.opacity = '0';
+                setTimeout(() => document.getElementById('impact-page').style.display = 'none', 500);
+                document.getElementById('main-content').classList.add('show-content');
+                if (glitchMode) {
+                    setInterval(() => {
+                        if (Math.random() > 0.6) {
+                            document.getElementById('body-main').classList.add('global-glitch');
+                            document.getElementById('bg-glitch-overlay').style.opacity = '1';
+                            setTimeout(() => {
+                                document.getElementById('body-main').classList.remove('global-glitch');
+                                document.getElementById('bg-glitch-overlay').style.opacity = '0';
+                            }, 200);
+                        }
+                    }, 2500);
+                }
+            }, 2000);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
-
 </html>
-
-
